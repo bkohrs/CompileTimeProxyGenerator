@@ -30,7 +30,7 @@ internal class ProxyAttribute : System.Attribute
     public string ProxyAccessor { get; }
 }
 
-", Encoding.UTF8));
+".Trim(), Encoding.UTF8));
         });
         var typeDeclarationSyntaxes = context.SyntaxProvider.CreateSyntaxProvider<TypeDeclarationSyntax?>(
             static (syntaxNode, _) =>
