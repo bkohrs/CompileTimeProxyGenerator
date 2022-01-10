@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompileTimeProxyGenerator", "CompileTimeProxyGenerator\CompileTimeProxyGenerator.csproj", "{947D87E8-6BEE-4837-925E-B67054219DE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompileTimeProxyGeneratorTests", "CompileTimeProxyGeneratorTests\CompileTimeProxyGeneratorTests.csproj", "{1C013CE8-3C10-4C00-B44B-44FD3C289322}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{947D87E8-6BEE-4837-925E-B67054219DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947D87E8-6BEE-4837-925E-B67054219DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947D87E8-6BEE-4837-925E-B67054219DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947D87E8-6BEE-4837-925E-B67054219DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C013CE8-3C10-4C00-B44B-44FD3C289322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C013CE8-3C10-4C00-B44B-44FD3C289322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C013CE8-3C10-4C00-B44B-44FD3C289322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C013CE8-3C10-4C00-B44B-44FD3C289322}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
