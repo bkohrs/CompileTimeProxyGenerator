@@ -10,7 +10,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>CompileTimeProxyGenerator</PackageId>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
         <Title>Compile Time Proxy Generator</Title>
         <Authors>Brian Kohrs</Authors>
         <Description>Source Generator that generates proxy implementations</Description>
