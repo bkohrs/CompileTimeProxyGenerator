@@ -15,18 +15,20 @@ public class ProxySourceGenerator : IIncrementalGenerator
         context.RegisterPostInitializationOutput(ctx =>
         {
             ctx.AddSource("ProxyAttribute.cs", SourceText.From(@"
+using System;
+
 namespace CompileTimeProxyGenerator;
 
-[System.AttributeUsage(AttributeTargets.Class)]
-internal class ProxyAttribute : System.Attribute
+[AttributeUsage(AttributeTargets.Class)]
+internal class ProxyAttribute : Attribute
 {
-    public ProxyAttribute(System.Type proxyType, string proxyAccessor)
+    public ProxyAttribute(Type proxyType, string proxyAccessor)
     {
         ProxyType = proxyType;
         ProxyAccessor = proxyAccessor;
     }
 
-    public System.Type ProxyType { get; }
+    public Type ProxyType { get; }
     public string ProxyAccessor { get; }
 }
 
@@ -73,7 +75,6 @@ internal class ProxyAttribute : System.Attribute
     {
         if (typeDeclarationSyntaxes.IsDefaultOrEmpty)
             return;
-
         var distinctTypes = typeDeclarationSyntaxes
             .Where(typeSyntax => typeSyntax is not null)
             .Cast<TypeDeclarationSyntax>()

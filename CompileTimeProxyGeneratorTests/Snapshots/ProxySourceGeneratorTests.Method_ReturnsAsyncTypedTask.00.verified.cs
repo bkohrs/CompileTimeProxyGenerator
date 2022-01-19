@@ -1,15 +1,17 @@
 ﻿//HintName: ProxyAttribute.cs
+using System;
+
 namespace CompileTimeProxyGenerator;
 
-[System.AttributeUsage(AttributeTargets.Class)]
-internal class ProxyAttribute : System.Attribute
+[AttributeUsage(AttributeTargets.Class)]
+internal class ProxyAttribute : Attribute
 {
-    public ProxyAttribute(System.Type proxyType, string proxyAccessor)
+    public ProxyAttribute(Type proxyType, string proxyAccessor)
     {
         ProxyType = proxyType;
         ProxyAccessor = proxyAccessor;
     }
 
-    public System.Type ProxyType { get; }
+    public Type ProxyType { get; }
     public string ProxyAccessor { get; }
 }
