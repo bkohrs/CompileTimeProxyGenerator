@@ -260,6 +260,60 @@ public class MyInterfaceProxy : IMyInterface
 }
 ").ConfigureAwait(false);
     }
+    [Test]
+    public async Task BaseInterface()
+    {
+        await RunGenerator(@"
+namespace Test;
+
+public interface IBaseInterface
+{
+    string MyBaseProp { get; set; }
+}
+
+public interface IMyInterface : IBaseInterface
+{
+    string MyProp { get; set; }
+}
+
+[CompileTimeProxyGenerator.Proxy(typeof(IMyInterface), ""_inner"")]
+public class MyInterfaceProxy : IMyInterface
+{
+    private IMyInterface _inner;
+    public MyInterfaceProxy(IMyInterface inner)
+    {
+        _inner = inner;
+    }
+}
+").ConfigureAwait(false);
+    }
+    [Test]
+    public async Task MultipleBaseInterfaces()
+    {
+        await RunGenerator(@"
+namespace Test;
+
+public interface IBaseInterface : System.IDisposable
+{
+    string MyBaseProp { get; set; }
+}
+
+public interface IMyInterface : IBaseInterface
+{
+    string MyProp { get; set; }
+}
+
+[CompileTimeProxyGenerator.Proxy(typeof(IMyInterface), ""_inner"")]
+public class MyInterfaceProxy : IMyInterface
+{
+    private IMyInterface _inner;
+    public MyInterfaceProxy(IMyInterface inner)
+    {
+        _inner = inner;
+    }
+}
+").ConfigureAwait(false);
+    }
 
     private async Task RunGenerator(string code)
     {

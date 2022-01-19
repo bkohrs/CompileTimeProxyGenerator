@@ -99,7 +99,6 @@ internal class ProxyAttribute : Attribute
                 attr.ConstructorArguments[0].Value is INamedTypeSymbol interfaceArg)
             {
                 var proxyAccessor = attr.ConstructorArguments[1].Value as string;
-                var members = interfaceArg.GetMembers();
                 var source = new StringBuilder();
                 source.AppendLine($"namespace {symbol.ContainingNamespace.ToDisplayString()};");
                 source.AppendLine();
@@ -108,6 +107,8 @@ internal class ProxyAttribute : Attribute
                 source.AppendLine(
                     $"public partial class {symbol.Name} : {interfaceArg.ToDisplayString()}");
                 source.AppendLine("{");
+                var interfaces = ImmutableArray.Create(interfaceArg).AddRange(interfaceArg.AllInterfaces);
+                var members = interfaces.SelectMany(intf => intf.GetMembers()).ToImmutableArray();
                 foreach (var property in members.OfType<IPropertySymbol>())
                 {
                     source.AppendLine($"    public {property.Type.ToDisplayString()} {property.Name}");
