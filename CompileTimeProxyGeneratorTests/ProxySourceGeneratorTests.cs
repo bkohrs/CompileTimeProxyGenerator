@@ -260,6 +260,7 @@ public class MyInterfaceProxy : IMyInterface
 }
 ").ConfigureAwait(false);
     }
+
     [Test]
     public async Task BaseInterface()
     {
@@ -287,6 +288,7 @@ public class MyInterfaceProxy : IMyInterface
 }
 ").ConfigureAwait(false);
     }
+
     [Test]
     public async Task MultipleBaseInterfaces()
     {
@@ -311,6 +313,59 @@ public class MyInterfaceProxy : IMyInterface
     {
         _inner = inner;
     }
+}
+").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task SkipsImplementedMethod()
+    {
+        await RunGenerator(@"
+namespace Test;
+
+public interface IMyInterface
+{
+    int MyMethod1(int a);
+    int MyMethod2(int b);
+}
+
+[CompileTimeProxyGenerator.Proxy(typeof(IMyInterface), ""_inner"")]
+public class MyInterfaceProxy : IMyInterface
+{
+    private IMyInterface _inner;
+    public MyInterfaceProxy(IMyInterface inner)
+    {
+        _inner = inner;
+    }
+    public int MyMethod1(int a)
+    {
+        return 1;
+    }
+}
+").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task SkipsImplementedProperty()
+    {
+        await RunGenerator(@"
+namespace Test;
+
+public interface IMyInterface
+{
+    int MyProp1 { get; set; }
+    int MyProp2 { get; set; }
+}
+
+[CompileTimeProxyGenerator.Proxy(typeof(IMyInterface), ""_inner"")]
+public class MyInterfaceProxy : IMyInterface
+{
+    private IMyInterface _inner;
+    public MyInterfaceProxy(IMyInterface inner)
+    {
+        _inner = inner;
+    }
+    public int MyProp1 { get; set; }
 }
 ").ConfigureAwait(false);
     }

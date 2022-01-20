@@ -107,10 +107,14 @@ internal class ProxyAttribute : Attribute
                 source.AppendLine(
                     $"public partial class {symbol.Name} : {interfaceArg.ToDisplayString()}");
                 source.AppendLine("{");
+                var existingMembers = symbol.GetMembers();
                 var interfaces = ImmutableArray.Create(interfaceArg).AddRange(interfaceArg.AllInterfaces);
                 var members = interfaces.SelectMany(intf => intf.GetMembers()).ToImmutableArray();
+                var existingProperties = existingMembers.OfType<IPropertySymbol>().ToImmutableArray();
                 foreach (var property in members.OfType<IPropertySymbol>())
                 {
+                    if (existingProperties.Any(existing => PropertiesEqual(existing, property)))
+                        continue;
                     source.AppendLine($"    public {property.Type.ToDisplayString()} {property.Name}");
                     source.AppendLine("    {");
                     if (property.GetMethod != null)
@@ -120,9 +124,12 @@ internal class ProxyAttribute : Attribute
                     source.AppendLine("    }");
                 }
 
+                var existingMethods = existingMembers.OfType<IMethodSymbol>().ToImmutableArray();
                 foreach (var member in members.OfType<IMethodSymbol>()
                              .Where(method => method.MethodKind == MethodKind.Ordinary))
                 {
+                    if (existingMethods.Any(existing => MethodsEqual(existing, member)))
+                        continue;
                     var isAsync = SymbolEqualityComparer.Default.Equals(member.ReturnType, voidTaskSymbol) ||
                                   SymbolEqualityComparer.Default.Equals(member.ReturnType, voidValueTaskSymbol) ||
                                   (member.ReturnType is INamedTypeSymbol returnType &&
@@ -142,5 +149,31 @@ internal class ProxyAttribute : Attribute
                 sourceProductionContext.AddSource(symbol.Name + ".cs", source.ToString());
             }
         }
+    }
+
+    private bool PropertiesEqual(IPropertySymbol property1, IPropertySymbol property2)
+    {
+        if (property1.Name != property2.Name)
+            return false;
+        if (!SymbolEqualityComparer.Default.Equals(property1.Type, property2.Type))
+            return false;
+        return true;
+    }
+
+    private static bool MethodsEqual(IMethodSymbol method1, IMethodSymbol method2)
+    {
+        if (method1.Name != method2.Name)
+            return false;
+        if (!SymbolEqualityComparer.Default.Equals(method1.ReturnType, method2.ReturnType))
+            return false;
+        if (method1.Parameters.Length != method2.Parameters.Length)
+            return false;
+        for (var i = 0; i < method1.Parameters.Length; i++)
+        {
+            if (!SymbolEqualityComparer.Default.Equals(method1.Parameters[i].Type, method2.Parameters[i].Type))
+                return false;
+        }
+
+        return true;
     }
 }
