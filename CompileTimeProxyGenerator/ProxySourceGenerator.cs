@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -105,7 +106,7 @@ internal class ProxyAttribute : Attribute
                 source.AppendLine(
                     $"[System.CodeDom.Compiler.GeneratedCode(\"{assemblyName.Name}\",\"{assemblyName.Version}\")]");
                 source.AppendLine(
-                    $"public partial class {symbol.Name} : {interfaceArg.ToDisplayString()}");
+                    $"{SyntaxFacts.GetText(symbol.DeclaredAccessibility)} partial class {symbol.Name} : {interfaceArg.ToDisplayString()}");
                 source.AppendLine("{");
                 var existingMembers = symbol.GetMembers();
                 var interfaces = ImmutableArray.Create(interfaceArg).AddRange(interfaceArg.AllInterfaces);

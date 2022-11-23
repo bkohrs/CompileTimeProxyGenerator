@@ -370,6 +370,29 @@ public class MyInterfaceProxy : IMyInterface
 ").ConfigureAwait(false);
     }
 
+    [Test]
+    public async Task InternalClass()
+    {
+        await RunGenerator(@"
+namespace Test;
+
+public interface IMyInterface
+{
+    void MyMethod();
+}
+
+[CompileTimeProxyGenerator.Proxy(typeof(IMyInterface), ""_inner"")]
+internal class MyInterfaceProxy : IMyInterface
+{
+    private IMyInterface _inner;
+    public MyInterfaceProxy(IMyInterface inner)
+    {
+        _inner = inner;
+    }
+}
+").ConfigureAwait(false);
+    }
+
     private async Task RunGenerator(string code)
     {
         var referenceAssemblies = await ReferenceAssemblies.Default
